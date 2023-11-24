@@ -48,6 +48,27 @@
                     "navigationBarTitleText": "编辑资料"
                 }
             }, {
+                "path": "download/index",
+                "style": {
+                    "navigationBarTitleText": "文件下载"
+                }
+            }, {
+                "path": "finance/editFinance",
+                "style": {
+                    "enablePullDownRefresh": true,
+                    "navigationBarTitleText": "信息修改"
+                }
+            }, {
+                "path": "finance/editFinanceInfo",
+                "style": {
+                    "navigationBarTitleText": "信息修改"
+                }
+            }, {
+                "path": "finance/editFinanceRecordInfo",
+                "style": {
+                    "navigationBarTitleText": "信息修改"
+                }
+            }, {
                 "path": "pwd/index",
                 "style": {
                     "navigationBarTitleText": "修改密码"
@@ -66,13 +87,13 @@
                 "path": "about/index",
                 "style": {
                     "navigationBarTitleText": "关于我们"
+
                 }
             }]
         },
         {
             "root": "page_view",
-            "pages": [
-                {
+            "pages": [{
                     "path": "expend",
                     "style": {
                         "navigationBarTitleText": "支出详情",
@@ -101,6 +122,16 @@
                     }
                 }
             ]
+        },
+        {
+            "root": "page_work",
+            "pages": [{
+                "path": "financeInfo",
+                "style": {
+                    "navigationBarTitleText": "记录详情",
+                    "enablePullDownRefresh": false
+                }
+            }]
         }
     ],
     "tabBar": {

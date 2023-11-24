@@ -10,6 +10,14 @@ export function listFinance(query) {
   })
 }
 
+export function listFinanceAll(query) {
+  return request({
+    url: '/system/finance/listAll',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询财务格- 主要用于存储多个格之间的信息详细
 export function getFinance(financeId) {
   return request({
@@ -41,5 +49,29 @@ export function delFinance(financeId) {
   return request({
     url: '/system/finance/' + financeId,
     method: 'delete'
+  })
+}
+
+export function getFinanceBasicInfo(query) {
+  return request({
+    url: '/system/info/getFinanceBasicInfo',
+    method: 'get',
+    params: query
+  })
+}
+
+export function exportFinance(data) {
+  return request({
+    url: '/system/finance/export',
+    method: 'post',
+     data: data
+  })
+}
+
+export function exportApp(data) {
+  return request({
+    url: '/system/finance/exportApp',
+    method: 'post',
+     data: data
   })
 }

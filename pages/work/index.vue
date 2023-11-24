@@ -1,7 +1,7 @@
 <template>
     <view class="container">
-        <u-navbar :safeAreaInsetTop="false" :fixed="false" left-text="记一笔">
-        </u-navbar>
+<!--        <u-navbar :safeAreaInsetTop="false" :fixed="false" left-text="记一笔">
+        </u-navbar> -->
         <view class="container-main">
             <!-- 顶部选项卡 -->
             <scroll-view class="pagecontrol-top-scroll" scroll-x="true" scroll-with-animation
@@ -52,6 +52,11 @@
                     typeName: type.typeName
                 }));
             }
+        },
+        onPullDownRefresh() {
+            setTimeout(function() {
+                uni.stopPullDownRefresh(); //停止页面加载动画
+            }, 1000);
         },
         methods: {
             initDate() {

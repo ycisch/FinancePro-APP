@@ -43,3 +43,12 @@ export function delRecord(data) {
     params:data
   })
 }
+
+// 删除结账记录格
+export function getFinanceRecordInfo(data) {
+  return request({
+    url: '/system/record/getFinanceRecordInfo',
+    method: 'get',
+    params:data
+  })
+}

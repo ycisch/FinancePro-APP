@@ -7,7 +7,7 @@
           <view v-if="!avatar" class="cu-avatar xl round bg-white">
             <view class="iconfont icon-people text-gray icon"></view>
           </view>
-          <image v-if="avatar" @click="handleBuilding" :src="avatar" class="cu-avatar xl round" mode="widthFix">
+          <image v-if="avatar" @click="handleToAvatar" :src="avatar" class="cu-avatar xl round" mode="widthFix">
           </image>
           <view v-if="!name" @click="handleToLogin" class="login-tip">
             点击登录
@@ -25,7 +25,7 @@
       </view>
     </view>
 
-    <view class="content-section">
+<!--    <view class="content-section">
       <view class="mine-actions grid col-4 text-center">
         <view class="action-item" @click="handleBuilding">
           <view class="iconfont icon-friendfill text-pink icon"></view>
@@ -43,10 +43,22 @@
           <view class="iconfont icon-dianzan text-green icon"></view>
           <text class="text">点赞我们</text>
         </view>
-      </view>
+      </view> -->
 
       <view class="menu-list">
-        <view class="list-cell list-cell-arrow" @click="handleBuilding">
+          <view class="list-cell list-cell-arrow" @click="handleToEditFinanceInfo">
+            <view class="menu-item-box">
+              <view class="iconfont icon-refresh menu-icon"></view>
+              <view>信息修改</view>
+            </view>
+          </view>
+          <view class="list-cell list-cell-arrow" @click="handleToDownloadFile">
+            <view class="menu-item-box">
+              <view class="iconfont icon-aixin menu-icon"></view>
+              <view>表格下载</view>
+            </view>
+          </view>
+<!--        <view class="list-cell list-cell-arrow" @click="handleBuilding">
           <view class="menu-item-box">
             <view class="iconfont icon-user menu-icon"></view>
             <view>编辑资料</view>
@@ -63,8 +75,8 @@
             <view class="iconfont icon-aixin menu-icon"></view>
             <view>关于我们</view>
           </view>
-        </view>
-        <view class="list-cell list-cell-arrow" @click="handleBuilding">
+        </view> -->
+        <view class="list-cell list-cell-arrow" @click="handleToSetting">
           <view class="menu-item-box">
             <view class="iconfont icon-setting menu-icon"></view>
             <view>应用设置</view>
@@ -97,6 +109,12 @@
     methods: {
       handleToInfo() {
         this.$tab.navigateTo('/page_mine/info/index')
+      },
+      handleToDownloadFile(){
+          this.$tab.navigateTo('/page_mine/download/index')
+      },
+      handleToEditFinanceInfo() {
+        this.$tab.navigateTo('/page_mine/finance/editFinance')
       },
       handleToEditInfo() {
         this.$tab.navigateTo('/page_mine/info/edit')

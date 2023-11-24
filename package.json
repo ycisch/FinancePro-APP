@@ -1,11 +1,18 @@
 {
-    "dependencies": {
-        "copy-webpack-plugin": "^5.1.1",
-        "echarts": "^5.4.3",
-        "uview-ui": "^1.8.8",
-        "vue-count-to": "^1.0.13"
-    },
-    "devDependencies": {
-        "compression-webpack-plugin": "^5.0.0"
+    "id": "lzc-picker",
+    "displayName": "picker选择框带有搜索功能",
+    "version": "1.0.2",
+    "description": "一个支持搜索功能的picker选择框，解决数据过多时需要滑动很长时间的问题",
+    "keywords": [
+        "picker",
+        "select",
+        "搜索",
+        "选择"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
     }
 }

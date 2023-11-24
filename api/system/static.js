@@ -42,3 +42,13 @@ export function getLineInfoList(query) {
     params:query
   })
 }
+
+
+
+export function getExcelInfo(query) {
+  return request({
+    url: '/system/static/getExcelInfo',
+    method: 'get',
+    params:query
+  })
+}

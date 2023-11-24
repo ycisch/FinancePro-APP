@@ -1,9 +1,15 @@
 <template>
     <view class="charts-box">
         <view style="min-height: 500rpx;">
+            <view>
+                <h2 class="text-info">山东信息</h2>
+            </view>
             <qiun-data-charts canvas2d type="pie" :opts="pieOpts" :chartData="pieData" />
         </view>
         <view style="min-height: 500rpx;">
+            <view>
+                <h2 class="text-info">山东信息</h2>
+            </view>
             <qiun-data-charts type="line" :opts="opts" :chartData="chartData" />
         </view>
         
@@ -137,7 +143,7 @@
                     },
                     extra: {
                         line: {
-                            type: "straight",
+                            type: "curve",
                             width: 2,
                             activeType: "hollow",
                             linearType: "none",
@@ -227,5 +233,26 @@
     .charts-box {
         width: 100%;
         height: 300px;
+    }
+    .text-info::before{
+            content: "";
+            display: block;
+            top: 1px;
+            border-radius: 10px;
+            background-color: #0ea8e4;
+            width: 5px;
+            height: 20px;
+            position: absolute;
+            top: 10px;
+            left: -12px;
+    }
+    .text-info{
+            font-size: 20px;
+            color: #1f2f3d;
+            margin-left: 20px;
+            line-height: 40px;
+            font-weight: 700;
+            white-space: nowrap;
+            position: relative;
     }
 </style>

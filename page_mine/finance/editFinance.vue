@@ -1,17 +1,9 @@
 <template>
     <view class="container">
+        <uni-nav-bar right-text="查询" :border="false" @clickRight="clickRight()"/>
+        <!-- <u-navbar rightText="查询" @rightClick="clickRight()" :safeAreaInsetTop="false"></u-navbar> -->
         <view class="text-area">
-            <view>
-                <PanelGroup :info="info" @handleSetLineChartData="handleSetLineChartData"></PanelGroup>
-                <!-- <barChart :type="type"></barChart> -->
-                <!-- <barChart></barChart> -->
-            </view>
-
             <view class="u-page">
-                <view class="serach-info">
-                    <view style="width: 100px;"><uni-section title="表格信息" type="line"></uni-section></view>
-                     <view style="width: 300px;"><uni-data-select v-model="typeId" :localdata="types" @change="change"></uni-data-select></view>
-                </view>
                 <u-list @scrolltolower="scrolltolower">
                     <u-list-item v-for="(item, index) in indexList" :key="index" class="custom-list-item">
                         <view class="info" @click="handleListClick(item)">
@@ -43,9 +35,47 @@
                 </u-list>
             </view>
         </view>
-    </view>
-</template>
+        <u-popup customStyle="width:300px" :show="show" @close="close" @open="open" mode="right">
+            <view>
+                <u-form :model="form" ref="uForm">
+                    <u-form-item labelWidth="30%" prop="type" borderBottom @click="clickType" label="所属表格">
+                        <u--input v-model="form.type" disabled disabledColor="#ffffff" placeholder="请选择所属表格"
+                            border="none"></u--input>
+                        <u-icon slot="right" name="arrow-right"></u-icon>
+                    </u-form-item>
+                    <u-form-item labelWidth="30%" prop="recordInfo" @click="changeRecord" borderBottom label="结账信息">
+                        <u--input v-model="form.dec" disabled disabledColor="#ffffff" placeholder="请选择信息"
+                            border="none"></u--input>
+                        <u-icon slot="right" name="arrow-right"></u-icon>
+                    </u-form-item>
+                </u-form>
+                <view class="search">
+                    <u-button @click="resetInfo" type="warning" :customStyle="buttonStyle">
+                        重置
+                    </u-button>
+                    <u-button type="primary" @click="submitInfo" :customStyle="buttonStyle">
+                        确定
+                    </u-button>
+                </view>
+            </view>
+            <my-picker mode="selector" @confirm="infoConfirm" v-model="showRecord" :default-selector="[0]"
+                :range="recordListBak" range-key="value">
+                <template v-slot>
+                    <uni-search-bar placeholder="请输入信息" :focus="false" v-model="recordSerach" cancelButton="none"
+                        @input="controlInput" style=" width: 70%;">
+                    </uni-search-bar>
+                </template>
+            </my-picker>
+            
+            <u-picker :defaultIndex="[0]" :show="showType" :columns="computedTypes" @cancel="typeCancel" @close="typeCancel"
+                @confirm="typeConfirm" closeOnClickOverlay @change="typeChange" keyName="text">
+            </u-picker>
+        </u-popup>
 
+       
+    </view>
+
+</template>
 
 <script>
     import {
@@ -54,28 +84,22 @@
     } from "@/api/system/static";
     import {
         getTypeList
-    } from "@/api/system/redis";
-
-    const info = {
-        "expend": {
-            name: "支出"
-        },
-        "income": {
-            name: "收入"
-        },
-        "shangdong": {
-            name: "山东"
-        },
-        "xinjiang": {
-            name: "新疆"
-        }
-    }
-
+    } from "@/api/system/redis"
+    import {
+        listFinanceAll
+    } from "@/api/system/finance";
     export default {
         data() {
             return {
+                showRecord: false,
+                showType: false,
+                show: false,
                 typeId: null,
+                financeId: null,
+                recordSerach: "",
                 types: [],
+                form: {},
+                query: {},
                 pageNum: 1,
                 pageSize: 20,
                 total: 0,
@@ -84,9 +108,24 @@
                 title: "",
                 info: {},
                 indexList: [],
+                recordList: [],
+                recordListBak: [],
                 scrollTop: 0,
                 showBackTop: false, // 控制u-back-top按钮的显示与隐藏
+                buttonStyle:{
+                    marginLeft: '30rpx',
+                    marginRight: '30rpx',
+                    width: '100px'
+                }
             }
+        },
+        computed: {
+            computedTypes() {
+                return [this.types];
+            }
+        },
+        onNavigationBarButtonTap(e) {
+            
         },
         mounted() {
             this.getStaticInfo();
@@ -107,6 +146,31 @@
             }, 1000);
         },
         methods: {
+            clickRight(){
+                this.show = !this.show
+            },
+            changeItem(e) {
+                console.log(e)
+                this.query.financeIds = e.id
+            },
+            changeRecord(e) {
+                let query = {}
+                query.financeType = this.form.typeId
+                listFinanceAll(query).then(response => {
+
+                    const savedData = response.rows.map(data => ({
+                        id: data.financeId,
+                        value: data.financeDec,
+                        financeFlag: data.financeFlag
+                    }));
+                    this.recordList = savedData.filter(item => item.financeFlag === '1');
+                    this.recordListBak = this.recordList;
+                    this.showRecord = true;
+                })
+            },
+            clickType() {
+                this.showType = true;
+            },
             initDate() {
                 getTypeList().then(response => {
                     // 使用 map 函数进行转换
@@ -126,7 +190,7 @@
             handleListClick(event) {
                 console.log(event)
                 uni.navigateTo({
-                    url: '/page_work/financeInfo?financeIds=' + event.financeId
+                    url: '/page_mine/finance/editFinanceInfo?financeIds=' + event.financeId
                 })
             },
 
@@ -151,20 +215,6 @@
                     this.info = respone;
                 })
             },
-
-            // handleScroll(e) {
-            //     this.scrollTop = e; // 监听uList组件的scroll事件，更新scrollTop的值
-            //     this.showBackTop = e > 1000; // 当滚动超过1000px时显示u-back-top按钮
-            //     console.log(this.scrollTop + "  " + this.showBackTop)
-            // },
-            // handleBackTopClick() {
-            //     console.log("####")
-            //     // 处理点击u-back-top按钮的逻辑，将页面滚动到顶部
-            //     uni.pageScrollTo({
-            //         scrollTop: '.u-page',
-            //         duration: 300,
-            //     });
-            // },
             scrolltolower() {
                 this.pageNum = this.pageNum + 1;
                 this.loadmore()
@@ -211,9 +261,72 @@
             },
             formatNumber(num) {
                 return num.toFixed(2);
-            }
+            },
+            open() {
+                // console.log('open');
+            },
+            close() {
+                this.show = false
+                this.typeId = null
+                this.financeId = null
+                this.resetInfo();
+            },
+            typeCancel(e) {
+                console.log(e)
+                this.showType = false
+            },
+            resetInfo() {
+                this.reset()
+                this.form = {}
+                this.recordList = []
+                this.recordListBak = []
+                this.loadmore()
+                this.show = false
+            },
+            submitInfo() {
+                this.reset();
+                let query = {}
+                query.pageNum = this.pageNum;
+                query.pageSize = this.pageSize;
+                query.financeType = this.typeId;
+                query.financeId = this.financeId
+                getTableInfo(query).then(res => {
+                    this.total = res.total;
+                    this.nowNum = this.nowNum + res.rows.length;
+                    if (this.nowNum > this.total) {
+                        uni.showToast({
+                            title: '无最新数据',
+                            icon: 'none'
+                        });
+                        return;
+                    }
+                    this.indexList = this.indexList.concat(res.rows);
+                    this.show = false
+                })
+            },
+            typeChange(e) {
+                console.log(e)
+            },
+            typeConfirm(e) {
+                this.form.type = e.value[0].text
+                this.form.typeId = e.value[0].value
+                this.form.dec = ""
+                this.typeId = e.value[0].value
+                this.query.financeType = e.value[0].value
+                this.showType = false
+            },
+            //查找对应的信息
+            infoConfirm(e) {
+                this.financeId = this.recordListBak[e[0]].id;
+                this.form.dec = this.recordListBak[e[0]].value;
+                console.log(this.financeId)
+            },
+            //处理输入框事件
+            controlInput() {
+                this.recordListBak = this.recordSerach ? this.recordList.filter(item => item.value.includes(this
+                    .recordSerach)) : this.recordList;
+            },
         }
-
     }
 </script>
 
@@ -273,7 +386,20 @@
     .item-box {
         display: flex;
     }
-    .serach-info{
+
+    .serach-info {
         display: flex;
+    }
+
+    .search {
+        padding-top: 10rpx;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .custom-style {
+        margin-left: 20rpx;
+        margin-right: 20rpx;
+        width: 100px
     }
 </style>

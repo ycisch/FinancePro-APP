@@ -3,7 +3,7 @@
     <view class="logo-content align-center justify-center flex">
       <image style="width: 100rpx;height: 100rpx;" :src="globalConfig.appInfo.logo" mode="widthFix">
       </image>
-      <text class="title">若依移动端登录</text>
+      <text class="title">管理系统-小程序登录</text>
     </view>
     <view class="login-form-content">
       <view class="input-item flex align-center">
@@ -28,11 +28,11 @@
         <text class="text-grey1">没有账号？</text>
         <text @click="handleUserRegister" class="text-blue">立即注册</text>
       </view>
-      <view class="xieyi text-center">
+<!--      <view class="xieyi text-center">
         <text class="text-grey1">登录即代表同意</text>
         <text @click="handleUserAgrement" class="text-blue">《用户协议》</text>
         <text @click="handlePrivacy" class="text-blue">《隐私协议》</text>
-      </view>
+      </view> -->
     </view>
      
   </view>

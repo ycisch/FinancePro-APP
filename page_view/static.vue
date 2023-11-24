@@ -1,11 +1,16 @@
 <template>
     <view>
         <view style="min-height: 500rpx;">
+            <view>
+                <h2 class="text-info">{{typeName}}信息</h2>
+            </view>
             <qiun-data-charts canvas2d type="pie" :opts="expendPieOpts" :chartData="expendPieData" />
         </view>
         <view class="column">
-            <qiun-data-charts  canvas2d type="column" :opts="expendColumnOpts"
-                :chartData="expendColumnData" />
+            <view>
+                <h2 class="text-info">{{typeName}}信息</h2>
+            </view>
+            <qiun-data-charts canvas2d type="column" :opts="expendColumnOpts" :chartData="expendColumnData" />
         </view>
 
     </view>
@@ -22,6 +27,7 @@
                 cWidth: 750,
                 cHeight: 500,
                 type: "expend",
+                typeName: "支出",
                 expendPieData: {},
                 expendPieOpts: {
                     rotate: false,
@@ -112,6 +118,11 @@
         mounted() {},
         onLoad(e) {
             this.type = e.type;
+            if (this.type == 'expend') {
+                this.typeName = '支出'
+            } else if (this.type == 'income') {
+                this.typeName = '收入'
+            }
         },
         methods: {
             getStaticInfoList() {
@@ -134,7 +145,16 @@
                             name: "金额",
                             data: response.arrayMoney,
                             legendShape: "circle",
-                        }]
+                        },{
+                            name: "总金额",
+                            data: response.arrayMoneyAll,
+                            legendShape: "circle",
+                        },{
+                            name: "结账记录",
+                            data: response.recordMoney,
+                            legendShape: "circle",
+                        }
+                        ]
                     };
 
                     this.expendColumnData = JSON.parse(JSON.stringify(resColumn));
@@ -149,5 +169,26 @@
     .column {
         width: 100%;
         height: 300px;
+    }
+    .text-info::before{
+            content: "";
+            display: block;
+            top: 1px;
+            border-radius: 10px;
+            background-color: #0ea8e4;
+            width: 5px;
+            height: 20px;
+            position: absolute;
+            top: 10px;
+            left: -12px;
+    }
+    .text-info{
+            font-size: 20px;
+            color: #1f2f3d;
+            margin-left: 20px;
+            line-height: 40px;
+            font-weight: 700;
+            white-space: nowrap;
+            position: relative;
     }
 </style>

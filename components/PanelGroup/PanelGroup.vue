@@ -5,8 +5,10 @@
                 <view class="icon icon-hetao"></view>
                 <view class="item-info">
                     <view class="item-font">新疆核桃</view>
-                    <view class="item-money"> <u-count-to :start-val="0" :end-val="Number(info.expendAllInfo)"
-                            :duration="2600" bold /></view>
+                    <view class="item-money">
+                        <span style="font-weight: bold;">暂无统计</span>
+                        <!-- <u-count-to :start-val="0" :end-val="Number(info.expendAllInfo)" :duration="2600" bold /> -->
+                    </view>
                 </view>
             </view>
             <view class="item" @click="handleSetLineChartData('shangdong')">
@@ -39,7 +41,6 @@
     </view>
 </template>
 <script>
-
     export default {
         props: {
             info: {
@@ -47,8 +48,7 @@
             },
         },
         data() {
-            return {
-            }
+            return {}
         },
         methods: {
             handleSetLineChartData(type) {
